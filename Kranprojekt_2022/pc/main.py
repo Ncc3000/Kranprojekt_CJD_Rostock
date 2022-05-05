@@ -1,11 +1,11 @@
+import keyboard
 import serial
 import time
 
 
 class ArduinoHandler:
     def __init__(self):
-        self.arduino_port = self.get_arduino_port()
-        self.ser = serial.Serial(port=self.arduino_port, baudrate=9600)
+        pass
 
     def get_arduino_values(self):
         if self.arduino_port is None:  # if no Arduino is found
@@ -44,5 +44,43 @@ class ArduinoHandler:
 
         return comm_port
 
+    def setup_arduino_connection(self):
+        while self.get_arduino_port() is None:
+            pass
+        self.arduino_port = self.get_arduino_port()
+        self.ser = serial.Serial(port=self.arduino_port, baudrate=9600)
 
-ser = serial.Serial(baudrate=9600, timeout=1)
+    def close(self):
+        self.ser.close()
+
+
+class MainLoop():
+    def __init__(self):
+        self.arduino_handler = ArduinoHandler()
+
+    def start(self):
+        while True:
+            if keyboard.is_pressed('8'):
+                print("UP")
+            elif keyboard.is_pressed('2'):
+                print("DOWN")
+
+            if keyboard.is_pressed('w'):
+                print("FORWARD")
+            elif keyboard.is_pressed('s'):
+                print("BACKWARDS")
+
+            if keyboard.is_pressed('a'):
+                print("LEFT")
+            elif keyboard.is_pressed('d'):
+                print("RIGHT")
+
+
+
+def main():
+    main_loop = MainLoop()
+    main_loop.start()
+
+
+if __name__ == '__main__':
+    main()
