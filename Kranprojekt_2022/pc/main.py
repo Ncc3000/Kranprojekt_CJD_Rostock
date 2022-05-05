@@ -76,7 +76,6 @@ class MainLoop():
                 print("RIGHT")
 
 
-
 def main():
     main_loop = MainLoop()
     main_loop.start()
