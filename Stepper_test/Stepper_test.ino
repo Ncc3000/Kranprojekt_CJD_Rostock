@@ -1,29 +1,40 @@
+//arm_top: 68
+//reduktion klein: 33 groß: 61
+//arm_hub: 62
+
 #define joyZ A8
-#define joyX A11
+#define joyX A9
 #define joyY A10
 
-int delayMS = 480;
-int delayRamp = 20;
-int stepCounter = 0;
+#define stepX 2
+#define dirX 5
 
-int NUM_STEPPER = 3;
-int stepPins[] = {2, 3, 4}; //x, y, z
-int richtungPins[] = {5, 6, 7}; //x, y, z
-long steps = 4000;
+#define stepY 3
+#define dirY 6
+
+#define stepZ 4
+#define dirZ 7
+
+int delayMS = 500;
+
+int min_joy = 450;
 
 float z;
 float x;
 float y;
 
 void setup() {
-  for(int i; i < NUM_STEPPER; i++) {
-    pinMode(stepPins[i], OUTPUT);
-    pinMode(richtungPins[i], OUTPUT);
-  }
-  pinMode(joyZ, INPUT);
+  pinMode(stepX, OUTPUT);
+  pinMode(stepY, OUTPUT);
+  pinMode(stepZ, OUTPUT);
+
+  pinMode(dirX, OUTPUT);
+  pinMode(dirY, OUTPUT);
+  pinMode(dirZ, OUTPUT);
+
   pinMode(joyX, INPUT);
   pinMode(joyY, INPUT);
-  Serial.begin(9600);
+  pinMode(joyZ, INPUT);
 }
 
 void loop() {
@@ -31,36 +42,49 @@ void loop() {
 }
 
 void tick() {
-  // empfängt daten von den joysticks und ändert dem entsprechend variablen
-  z = analogRead(joyZ)-(1024/2-13);
-  x = analogRead(joyX)-(1024/2-13);
-  y = analogRead(joyY)-(1024/2-13);
-  if (z >= 100) {
-    digitalWrite(richtungPins[0],HIGH); // im Uhrzeigersinn
-    digitalWrite(richtungPins[1],HIGH);
-    digitalWrite(richtungPins[2],HIGH);
+  x = analogRead(joyX) - 511; // links/rechts
+  y = analogRead(joyY) - 511; // hinten/vorne
+  z = analogRead(joyZ) - 511; // oben, unten
 
-    digitalWrite(stepPins[0],HIGH);
-    digitalWrite(stepPins[1],HIGH);
-    digitalWrite(stepPins[2],HIGH);
-    delayMicroseconds(delayMS);
-    digitalWrite(stepPins[0],LOW);
-    digitalWrite(stepPins[1],LOW);
-    digitalWrite(stepPins[2],LOW);
-    delayMicroseconds(delayMS);
-  }
-  else if (z <= -100) {
-    digitalWrite(richtungPins[0],LOW); // gegen den Uhrzeigersinn
-    digitalWrite(richtungPins[1],LOW);
-    digitalWrite(richtungPins[2],LOW);
+  if (z >= min_joy) {
+    digitalWrite(dirZ, HIGH);
 
-    digitalWrite(stepPins[0],HIGH);
-    digitalWrite(stepPins[1],HIGH);
-    digitalWrite(stepPins[2],HIGH);
-    delayMicroseconds(delayMS);
-    digitalWrite(stepPins[0],LOW);
-    digitalWrite(stepPins[1],LOW);
-    digitalWrite(stepPins[2],LOW);
-    delayMicroseconds(delayMS);
+    digitalWrite(stepZ, HIGH);
   }
+  else if (z <= -min_joy) {
+    digitalWrite(dirZ, LOW);
+
+    digitalWrite(stepZ, HIGH);
+  }
+
+  
+  if (x >= min_joy) {
+    digitalWrite(dirX, HIGH);
+
+    digitalWrite(stepX, HIGH);
+  }
+  else if (x <= -min_joy) {
+    digitalWrite(dirX, LOW);
+
+    digitalWrite(stepX, HIGH);
+  }
+
+  
+  if (y >= min_joy) {
+    digitalWrite(dirY, HIGH);
+
+    digitalWrite(stepY, HIGH);
+  }
+  else if (y <= -min_joy) {
+    digitalWrite(dirY, LOW);
+
+    digitalWrite(stepY, HIGH);
+  }
+
+  delayMicroseconds(delayMS);
+  digitalWrite(stepZ, LOW),
+  delayMicroseconds(delayMS * 2);
+  digitalWrite(stepY, LOW);
+  delayMicroseconds(delayMS);
+  digitalWrite(stepX, LOW);
 }
