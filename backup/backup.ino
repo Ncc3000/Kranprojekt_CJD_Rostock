@@ -134,4 +134,6 @@ void tick() {
   digitalWrite(stepZ, LOW);
   digitalWrite(stepX, LOW);
   digitalWrite(stepY, LOW);
+
+  delayMicroseconds(delayMS);
 }
