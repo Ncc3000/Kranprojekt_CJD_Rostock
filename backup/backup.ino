@@ -97,10 +97,10 @@ void tick() {
 
   if (s >= min_joy and delayServo <= 0 and servoGrad1 <= 179) {
     servoGrad1++;
-    delayServo = 3;
+    delayServo = 8;
   } else if ( s <= -min_joy and delayServo <= 0 and servoGrad1 >= 1) {
     servoGrad1--;
-    delayServo = 3;
+    delayServo = 8;
   } else {
     delayServo--;
   }
@@ -109,31 +109,9 @@ void tick() {
   servo1.write(servoGrad1);
   servo2.write(servoGrad2);
 
-  
-  delayMicroseconds(delayMS);
-  
-  digitalWrite(stepZ, LOW);
-  
-  delayMicroseconds(delayMS);
-  
-  if (abs(z >= min_joy)) {
-    digitalWrite(stepZ, HIGH);
-  }
-  delayMicroseconds(delayMS);
-  
-  digitalWrite(stepZ, LOW);
-  
-  delayMicroseconds(delayMS);
-  
-  if (abs(z >= min_joy)) {
-    digitalWrite(stepZ, HIGH);
-  }
-  
   delayMicroseconds(delayMS);
   
   digitalWrite(stepZ, LOW);
   digitalWrite(stepX, LOW);
   digitalWrite(stepY, LOW);
-
-  delayMicroseconds(delayMS);
 }
