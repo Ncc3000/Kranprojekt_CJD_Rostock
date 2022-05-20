@@ -7,3 +7,6 @@ Dies ist der Code für das Kranprojekt 2022 der 9b an dem CJD Rostock.
 - Johanna
 - Theo
 - Anna
+
+### Danke an:
+- Herr Grünbaum
